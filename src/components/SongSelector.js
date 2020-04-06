@@ -2,19 +2,21 @@ import React from 'react';
 
 const SongSelector = (props) => {
     const options = props.songs.map(song => {
-        return <option value={song.alpha3Code} key={song.alpha3Code}>{song.name}</option>
+        return <option value={song.id.attributes['im:id']} key={song.id.attributes['im:id']}>
+            {song.title.label}</option>
     })
 
     function handleChange(event) {
-        props.onCountrySelected(event.target.value)
+        props.onSongSelected(event.target.value)
     }
 
     return (
-        <select id="song-selector" onChange={handleChange} defaultValue="default">
+        <select id="songselector" defaultValue="default" onChange={handleChange} >
             <option disabled value="default"> Choose a choon...</option>
+            {options}
         </select>
     )
 }
 
 
-export default SongSelector
+export default SongSelector;

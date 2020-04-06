@@ -1,12 +1,13 @@
 import React from 'react';
 import SongSelector from '../components/SongSelector';
+import SongDetial from '../components/SongDetial';
 
 class SongContainer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             songs: [],
-            selectedSongAlpha3Code: ""
+            selectedId: ""
         };
         this.handleSongSelected = this.handleSongSelected.bind(this);
     }
@@ -16,22 +17,23 @@ class SongContainer extends React.Component {
 
         fetch(url)
         .then(res => res.json())
-        .then(songs => this.setState({songs: songs}))
+        .then(songsApi => this.setState({ songs: songsApi.feed.entry })) ///whats this doing?
         .catch(err => console.error);
     }
 
-    handleSongSelected(alpha3Code) {
-        this.setState({selectedSongAlpha3Code: alpha3Code})
+    handleSongSelected(id) {
+        this.setState({selectedSongId: id})
     }
 
     render() {
-        const selectedSong = this.state.songs.find(song => song.alpha3Code === 
-            this.state.selectedSongAlpha3Code)
+        const selectedSong = this.state.songs.find(song => song.id.attributes['im:id'] === 
+            this.state.selectedSongId)
     
         return(
             <div>
                 <h2> Song Container</h2>
-                <SongSelector songs={this.state.songs} onSongSelected ={ this.handleCountrySelected}/>
+                <SongSelector songs={this.state.songs} onSongSelected ={ this.handleSongSelected}/>
+                <SongDetial song={selectedSong}/>
             </div>
 
         );
