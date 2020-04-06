@@ -1,4 +1,5 @@
 import React from 'react';
+import SongSelector from '../components/SongSelector';
 
 class SongContainer extends React.Component {
     constructor(props) {
@@ -7,19 +8,33 @@ class SongContainer extends React.Component {
             songs: [],
             selectedSongAlpha3Code: ""
         };
-    }
-    componentDidMount(){
-        const url = "https://itunes.apple.com/gb/rss/topsongs/limit=20/json";
+        this.handleSongSelected = this.handleSongSelected.bind(this);
     }
 
-    render(){
-        
+    componentDidMount(){
+        const url = "https://itunes.apple.com/gb/rss/topsongs/limit=20/json";
+
+        fetch(url)
+        .then(res => res.json())
+        .then(songs => this.setState({songs: songs}))
+        .catch(err => console.error);
+    }
+
+    handleSongSelected(alpha3Code) {
+        this.setState({selectedSongAlpha3Code: alpha3Code})
+    }
+
+    render() {
+        const selectedSong = this.state.songs.find(song => song.alpha3Code === 
+            this.state.selectedSongAlpha3Code)
+    
         return(
             <div>
                 <h2> Song Container</h2>
+                <SongSelector songs={this.state.songs} onSongSelected ={ this.handleCountrySelected}/>
             </div>
 
-        )
+        );
     }
 }
 
